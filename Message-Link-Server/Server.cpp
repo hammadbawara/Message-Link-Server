@@ -1,5 +1,9 @@
 #include <iostream>
 #include <asio.hpp>
+#include <LinkList.hpp>
+#include <utils.hpp>
+
+
 
 int main() {
     asio::io_context io_context;
@@ -11,6 +15,8 @@ int main() {
         asio::ip::tcp::socket socket(io_context);
         acceptor.accept(socket);
 
+        LinkedList chatList;
+
         std::cout << "Connection established with a client.\n";
 
         // Receive and print messages from the client in a loop
@@ -20,13 +26,25 @@ int main() {
             size_t bytesRead = socket.read_some(asio::buffer(buffer, sizeof(buffer)));
             if (bytesRead > 0) {
                 int i = 0;
-                for (int i = 0; i < 1024; i++) {
+                for (i = 0; i < 1024; i++) {
                     if (buffer[i] == -52) {
                         buffer[i] = '\0';
                         break;
                     }
                 }
-                std::cout << "Message from client: " << buffer << "\n";
+                string message = buffer;
+                // get time in string
+                string time = getCurrentDate();
+
+                // ip address of client
+                string ip = socket.remote_endpoint().address().to_string();
+
+                Chat chat(time, ip, message);
+
+                chatList.addChat(chat);
+
+                std::cout << "Message from client: " << message << "\n";
+                
 
                 for (int i = 0; i < 1024; i++) {
                     buffer[i] = '\0';
