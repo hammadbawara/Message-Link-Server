@@ -45,6 +45,10 @@ int main() {
 
                 std::cout << "Message from client: " << message << "\n";
                 
+                if (message == "=save" || message == "=s") {
+                    chatList.saveToJsonFile("data.json");
+                    socket.write_some(asio::buffer("Data saved successfully.\n"));   
+                }
 
                 for (int i = 0; i < 1024; i++) {
                     buffer[i] = '\0';

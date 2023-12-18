@@ -1,4 +1,7 @@
 #include <iostream>
+#include <fstream>
+#include <json.hpp>
+using json = nlohmann::json;
 using namespace std;
 
 // Define the Chat structure
@@ -48,7 +51,34 @@ public:
         }
     }
 
-    // Destructor to free memory when the list is destroyed
+     //Function to save the linked list data to a file in JSON format
+    void saveToJsonFile(const string& filename) {
+        json jsonData;
+
+        Node* current = head;
+        while (current != nullptr) {
+            json chatEntry;
+            chatEntry["message"] = current->data.message;
+            chatEntry["time"] = current->data.time;
+            chatEntry["ipAddress"] = current->data.ipAddress;
+            jsonData.push_back(chatEntry);
+
+            current = current->next;
+        }
+
+        // Save JSON data to a file
+        ofstream file(filename);
+        if (file.is_open()) {
+            file << jsonData.dump(4);  // pretty-print with an indentation of 4 spaces
+            file.close();
+            cout << "Data saved to " << filename << " successfully.\n";
+        }
+        else {
+            cerr << "Unable to open file " << filename << " for writing.\n";
+        }
+    }
+
+     //Destructor to free memory when the list is destroyed
     ~LinkedList() {
         Node* current = head;
         while (current != nullptr) {
@@ -59,3 +89,4 @@ public:
         head = nullptr;
     }
 };
+
