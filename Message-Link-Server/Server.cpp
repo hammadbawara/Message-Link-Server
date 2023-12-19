@@ -21,10 +21,10 @@ int main() {
         // Hash Map to get command from client
         StringHashMap commandMap;
 
-        commandMap.insert("1", "=save");
-        commandMap.insert("2", "=delete");
-        commandMap.insert("3", "=display");
-        commandMap.insert("4", "=exit");
+        commandMap.insert("1", "save");
+        commandMap.insert("2", "delete");
+        commandMap.insert("3", "display");
+        commandMap.insert("4", "exit");
 
         std::cout << "Connection established with a client.\n";
 
@@ -49,7 +49,11 @@ int main() {
                     
                     string command = message.substr(1, message.find(" ") - 1);
 
-                    if (command == "1") {
+                    if (command.size() == 1) {
+                        command = commandMap.get(command);
+                    }
+
+                    if (command == "save") {
                         string filename = message.substr(message.find(" ") + 1, message.length());
                         if (filename != "") {
                             chatList.saveToJsonFile(filename);
@@ -59,7 +63,7 @@ int main() {
                         }
                         
                     }
-                    else if (command == "2") {
+                    else if (command == "delete") {
                         string filename = message.substr(message.find(" ") + 1, message.length());
                         if (filename != "") {
                             chatList.deleteChatFile(filename);
@@ -68,12 +72,13 @@ int main() {
                             std::cout << "Filename is not specified" << endl;
                         }
                     }
-                    else if (command == "3") {
+                    else if (command == "display") {
                         chatList.displayChats();
                     }
-                    else if (command == commandMap.get("4")) {
+                    else if (command == "delete") {
                         break;
-                    }else {
+                    }
+                    else {
                         std::cout << "Invalid command.\n";
                     }
 
