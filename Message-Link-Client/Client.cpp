@@ -6,7 +6,7 @@ int main() {
     asio::ip::tcp::socket socket(io_context);
 
     // Connect to the server
-    socket.connect(asio::ip::tcp::endpoint(asio::ip::address::from_string("127.0.0.1"), 8888));
+    socket.connect(asio::ip::tcp::endpoint(asio::ip::address::from_string("192.168.43.25"), 8888));
 
     while (true) {
         // Get a message from the user
@@ -17,7 +17,6 @@ int main() {
         // Send the message to the server
         asio::write(socket, asio::buffer(message.c_str(), message.size()));
 
-        // Check if the user wants to exit
         if (message == "exit") {
             break;
         }

@@ -33,7 +33,6 @@ int main() {
                     }
                 }
                 string message = buffer;
-                // get time in string
                 string time = getCurrentDate();
 
                 // ip address of client
@@ -41,13 +40,12 @@ int main() {
 
                 Chat chat(time, ip, message);
 
-                chatList.addChat(chat);
-
                 std::cout << "Message from client: " << message << "\n";
                 
                 if (message == "=save" || message == "=s") {
-                    chatList.saveToJsonFile("data.json");
-                    socket.write_some(asio::buffer("Data saved successfully.\n"));   
+                    chatList.saveToJsonFile("data.json");   
+                }else {
+                    chatList.addChat(chat);
                 }
 
                 for (int i = 0; i < 1024; i++) {

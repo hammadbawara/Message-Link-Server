@@ -4,33 +4,27 @@
 using json = nlohmann::json;
 using namespace std;
 
-// Define the Chat structure
 struct Chat {
     string message;
     string time;
     string ipAddress;
 
-    // Constructor for convenient initialization
     Chat(const string& msg, const string& t, const string& ip)
         : message(msg), time(t), ipAddress(ip) {}
 };
 
-// Define the Node structure for the linked list
 struct Node {
     Chat data;
     Node* next;
 
-    // Constructor for convenient initialization
     Node(const Chat& chat) : data(chat), next(nullptr) {}
 };
 
-// Define the LinkedList class
 class LinkedList {
 private:
     Node* head;
 
 public:
-    // Constructor to initialize an empty list
     LinkedList() : head(nullptr) {}
 
     // Function to add a new node to the list
@@ -69,7 +63,7 @@ public:
         // Save JSON data to a file
         ofstream file(filename);
         if (file.is_open()) {
-            file << jsonData.dump(4);  // pretty-print with an indentation of 4 spaces
+            file << jsonData.dump(4);
             file.close();
             cout << "Data saved to " << filename << " successfully.\n";
         }
