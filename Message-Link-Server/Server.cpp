@@ -1,7 +1,8 @@
 #include <iostream>
 #include <asio.hpp>
-#include <LinkList.hpp>
-#include <utils.hpp>
+#include "LinkList.hpp"
+#include "utils.hpp"
+#include "HashMap.hpp"
 
 
 
@@ -16,6 +17,14 @@ int main() {
         acceptor.accept(socket);
 
         LinkedList chatList;
+
+        // Hash Map to get command from client
+        HashMap<string, string> commandMap;
+
+        commandMap.insert("1", "=save");
+        commandMap.insert("2", "=delete");
+        commandMap.insert("3", "=display");
+        commandMap.insert("4", "=exit");
 
         std::cout << "Connection established with a client.\n";
 
@@ -32,19 +41,52 @@ int main() {
                         break;
                     }
                 }
-                string message = buffer;
-                string time = getCurrentDate();
-
-                // ip address of client
-                string ip = socket.remote_endpoint().address().to_string();
-
-                Chat chat(time, ip, message);
-
-                std::cout << "Message from client: " << message << "\n";
                 
-                if (message == "=save" || message == "=s") {
-                    chatList.saveToJsonFile("data.json");   
+                char command = buffer[0];
+                string message = buffer;
+
+                if (command == '=') {
+                    
+                    string command = message.substr(1, message.find(" ") - 1);
+
+                    if (command == "1") {
+                        string filename = message.substr(message.find(" ") + 1, message.length());
+                        if (filename != "") {
+                            chatList.saveToJsonFile(filename);
+                        }
+                        else {
+                            std::cout << "Filename is not specified" << endl;
+                        }
+                        
+                    }
+                    else if (command == "2") {
+                        string filename = message.substr(message.find(" ") + 1, message.length());
+                        if (filename != "") {
+                            chatList.deleteChatFile(filename);
+                        }
+                        else {
+                            std::cout << "Filename is not specified" << endl;
+                        }
+                    }
+                    else if (command == "3") {
+                        chatList.displayChats();
+                    }
+                    else if (command == commandMap.get("4")) {
+                        break;
+                    }else {
+                        std::cout << "Invalid command.\n";
+                    }
+
                 }else {
+                    string time = getCurrentDate();
+
+                    // ip address of client
+                    string ip = socket.remote_endpoint().address().to_string();
+
+                    Chat chat(time, ip, message);
+
+                    std::cout << "Message from client: " << message << "\n";
+
                     chatList.addChat(chat);
                 }
 

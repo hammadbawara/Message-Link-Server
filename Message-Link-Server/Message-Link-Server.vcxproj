@@ -131,6 +131,7 @@
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\HashMap.hpp" />
     <ClInclude Include="..\include\LinkList.hpp" />
     <ClInclude Include="..\include\utils.hpp" />
   </ItemGroup>

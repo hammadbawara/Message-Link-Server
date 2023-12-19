@@ -72,6 +72,16 @@ public:
         }
     }
 
+    //Function to delete a file
+    void deleteChatFile(string filename) {
+        if (remove(filename.c_str()) != 0) {
+            cerr << "Unable to delete file " << filename << "\n";
+        }
+        else {
+            cout << "File " << filename << " deleted successfully.\n";
+        }
+    }
+
      //Destructor to free memory when the list is destroyed
     ~LinkedList() {
         Node* current = head;
