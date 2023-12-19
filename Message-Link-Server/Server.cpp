@@ -19,7 +19,7 @@ int main() {
         LinkedList chatList;
 
         // Hash Map to get command from client
-        HashMap<string, string> commandMap;
+        StringHashMap commandMap;
 
         commandMap.insert("1", "=save");
         commandMap.insert("2", "=delete");

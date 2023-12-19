@@ -1,26 +1,31 @@
 #include <iostream>
 #include <vector>
 #include <list>
-#include <iterator>
+using namespace std;
 
-// Hash Map class
-template<typename KeyType, typename ValueType>
-class HashMap {
+class StringHashMap {
 private:
     struct KeyValuePair {
-        KeyType key;
-        ValueType value;
+        string key;
+        string value;
     };
-    std::vector<std::list<KeyValuePair>> buckets;
 
-    size_t hash(const KeyType& key) const {
-        return std::hash<KeyType>{}(key) % buckets.size();
+    vector<list<KeyValuePair>> buckets;
+
+    // Hash function to map a key to an index
+    size_t hash(const string& key) const {
+        size_t sum = 0;
+        for (char c : key) {
+            sum += static_cast<size_t>(c);
+        }
+        return sum % buckets.size();
     }
 
 public:
-    HashMap(size_t size = 10) : buckets(size) {}
+    StringHashMap(size_t size = 10) : buckets(size) {}
 
-    void insert(const KeyType& key, const ValueType& value) {
+    // Insert a key-value pair into the hash map
+    void insert(const string& key, const string& value) {
         size_t index = hash(key);
         for (auto& pair : buckets[index]) {
             if (pair.key == key) {
@@ -31,11 +36,11 @@ public:
         }
 
         // Key doesn't exist, add a new key-value pair
-        buckets[index].push_back({key, value});
+        buckets[index].push_back({ key, value });
     }
 
     // Get the value associated with a key
-    ValueType get(const KeyType& key) const {
+    string get(const string& key) const {
         size_t index = hash(key);
         for (const auto& pair : buckets[index]) {
             if (pair.key == key) {
@@ -44,10 +49,8 @@ public:
             }
         }
 
-        // Key not found, return a default value (you might want to handle this differently)
-        return ValueType{};
+        return "";
     }
-
-    // Destructor
-    ~HashMap() = default;
+    
+    ~StringHashMap() = default;
 };
